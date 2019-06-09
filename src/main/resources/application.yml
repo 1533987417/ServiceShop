@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    primary:
+      url: jdbc:mysql://localhost:3306/serviceshop?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 123
+      type: com.alibaba.druid.pool.DruidDataSource
+  jpa:
+    show-sql: true
+    hibernate:
+
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+         hibernate:
+         dialect: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
+  resources:
+    static-locations: classpath:static/,file:static/
+server:
+  port:  8081
+  url: http://localhost:8081/ykt
+  fileurl: E:\家政服务\后台\demo2\src\main\resources\static\ykt

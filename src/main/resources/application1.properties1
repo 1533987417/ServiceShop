@@ -1,0 +1,11 @@
+spring.datasource.one.jdbc-url=jdbc:sqlserver://localhost;database=yzukjcold
+spring.datasource.one.username=sa
+spring.datasource.one.password=520530
+spring.datasource.one.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.secondary.url=jdbc:sqlserver://localhost;database=zqkyxt
+spring.datasource.secondary.username=sa
+spring.datasource.secondary.password=520530
+spring.datasource.secondary.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+spring.jpa.properties.hibernate.hbm2ddl.auto=update
