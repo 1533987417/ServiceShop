@@ -8,16 +8,22 @@ import com.example.demo2.Response.ResponseEnum;
 import com.example.demo2.entity.*;
 
 import com.example.demo2.tools.HttpClient;
+import com.example.demo2.tools.WeiXinUtil;
 import com.example.demo2.tools.WxEntity.CreateOrderRequest;
+import com.example.demo2.tools.WxEntity.CreateOrderResponse;
+import com.example.demo2.tools.WxEntity.NoticeRequest;
+import com.example.demo2.tools.WxEntity.NoticeResponse;
 import com.example.demo2.tools.XMLUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.*;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,14 +46,14 @@ public class testController {
     CartRes cartRes;
     @Autowired
     CommentRes commentRes;
-    Logger logger = LoggerFactory.getLogger(testController.class);
+    @Autowired
+    WeiXinUtil weiXinUtil;
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
-    public String test(){
-        HttpClient client=new HttpClient();
+    public CreateOrderResponse test(){
+
         CreateOrderRequest request=new CreateOrderRequest();
         request.setAppid("44444");
-
-        return client.post("https://api.mch.weixin.qq.com/pay/unifiedorder", XMLUtil.convertToXml(request));
+       return weiXinUtil.createOrder(request,"");
     }
     @RequestMapping(value = "/getCategory",method = RequestMethod.GET)
     public CommonResponse getCategory(@RequestParam("categoryPid") Integer categoryPid){
@@ -190,10 +196,17 @@ public class testController {
         return  commonResponse;
     }
 
-    public static void main(String[] args) {
-        Logger logger = LoggerFactory.getLogger(testController.class);
+    @PostMapping(value = "/payCallBack",consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
+    public NoticeResponse payCallBack(@RequestBody NoticeRequest request){
+        return null;
 
-        logger.info("sdsdsds");
+    }
+
+
+    public static void main(String[] args) {
+        Logger logger = Logger.getLogger(testController.class);
+        logger.getClass();
+        logger.info(logger.getLoggerRepository());
         logger.error("错误");
         logger.debug("调试");
     }

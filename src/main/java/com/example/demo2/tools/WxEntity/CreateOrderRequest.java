@@ -17,6 +17,15 @@ public class CreateOrderRequest {
     private String spbill_create_ip;
     private String notify_url;
     private String trade_type;
+    private String openid;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public String getAppid() {
         return appid;

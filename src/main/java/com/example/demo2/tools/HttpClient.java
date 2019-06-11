@@ -1,7 +1,12 @@
 package com.example.demo2.tools;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.example.demo2.tools.WxEntity.CreateOrderRequest;
+import com.example.demo2.tools.WxEntity.CreateOrderResponse;
 import com.example.demo2.tools.WxEntity.Result;
+import com.google.gson.Gson;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -35,7 +40,7 @@ public class HttpClient {
       * @param xmlString 发送的xml数据流  
       * @return null发送失败，否则返回响应内容  
       */
-         public  String post(String url,String xmlFileName) {
+         public  String post(String url,String xmlFileName) throws UnsupportedEncodingException {
 
              RestTemplate client = new RestTemplate();
              client.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
@@ -48,15 +53,10 @@ public class HttpClient {
              HttpEntity<String> requestEntity = new HttpEntity<String>(xmlFileName, headers);
              //  执行HTTP请求
              ResponseEntity<String> response = client.exchange(url, HttpMethod.POST, requestEntity, String.class);
-             return response.getBody();
+             return new String( response.getBody().getBytes("iso-8859-1"), "utf-8");
          }
     public static void main(String[] args) throws UnsupportedEncodingException {
 
-        HttpClient client=new HttpClient();
-        CreateOrderRequest request=new CreateOrderRequest();
-        request.setAppid("44444");
-      String result=  client.post("https://api.mch.weixin.qq.com/pay/unifiedorder",XMLUtil.convertToXml(request));
 
-        System.out.println(new String( result.getBytes("iso-8859-1"), "utf-8"));
     }
 }
