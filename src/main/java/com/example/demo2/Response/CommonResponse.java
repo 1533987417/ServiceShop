@@ -5,35 +5,36 @@ import java.rmi.server.UID;
 import java.util.UUID;
 
 public class CommonResponse<T> implements Serializable {
-    private Integer code;
-    private String message;
-    private T result;
+    private Integer errno;
+    private String errmsg;
+    private T data;
     private String logId;
     public CommonResponse(){
         this.logId= UUID.randomUUID().toString();
     }
-    public Integer getCode() {
-        return code;
+
+    public Integer getErrno() {
+        return errno;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setErrno(Integer errno) {
+        this.errno = errno;
     }
 
-    public String getMessage() {
-        return message;
+    public String getErrmsg() {
+        return errmsg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrmsg(String errmsg) {
+        this.errmsg = errmsg;
     }
 
-    public T getResult() {
-        return result;
+    public T getData() {
+        return data;
     }
 
-    public void setResult(T result) {
-        this.result = result;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public String getLogId() {

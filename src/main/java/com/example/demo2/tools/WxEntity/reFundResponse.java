@@ -1,21 +1,24 @@
 package com.example.demo2.tools.WxEntity;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="xml")
-public class CreateOrderResponse {
+@JacksonXmlRootElement(localName = "xml")
+public class reFundResponse {
     private String return_code;
-    private String return_msg;
+    private String 	return_msg;
     private String appid;
     private String mch_id;
     private String nonce_str;
     private String openid;
     private String sign;
     private String result_code;
-    private String prepay_id;
-    private String trade_type;
+    private String transaction_id;
+    private String out_trade_no;
+    private String out_refund_no;
 
     public String getReturn_code() {
         return return_code;
@@ -81,19 +84,27 @@ public class CreateOrderResponse {
         this.result_code = result_code;
     }
 
-    public String getPrepay_id() {
-        return prepay_id;
+    public String getTransaction_id() {
+        return transaction_id;
     }
 
-    public void setPrepay_id(String prepay_id) {
-        this.prepay_id = prepay_id;
+    public void setTransaction_id(String transaction_id) {
+        this.transaction_id = transaction_id;
     }
 
-    public String getTrade_type() {
-        return trade_type;
+    public String getOut_trade_no() {
+        return out_trade_no;
     }
 
-    public void setTrade_type(String trade_type) {
-        this.trade_type = trade_type;
+    public void setOut_trade_no(String out_trade_no) {
+        this.out_trade_no = out_trade_no;
+    }
+
+    public String getOut_refund_no() {
+        return out_refund_no;
+    }
+
+    public void setOut_refund_no(String out_refund_no) {
+        this.out_refund_no = out_refund_no;
     }
 }

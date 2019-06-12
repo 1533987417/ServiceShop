@@ -1,6 +1,7 @@
 package com.example.demo2.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "goods")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Goods implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -34,9 +34,9 @@ public class AdminControoller {
     @PostMapping("/saveCateGory")
     public CommonResponse addCateGory(@RequestBody @Validated Category category){
         CommonResponse commonResponse=new CommonResponse();
-        commonResponse.setCode(ResponseEnum.RESPONSE_ENUM_Success.getCode());
-        commonResponse.setMessage(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
-        commonResponse.setResult(categoryRes.save(category));
+        commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        commonResponse.setData(categoryRes.save(category));
         return commonResponse;
     }
 
@@ -49,27 +49,27 @@ public class AdminControoller {
        for(Images images :goods.getGoodsBanner()) {
            images.setImageUid(uuid);
        }
-        commonResponse.setCode(ResponseEnum.RESPONSE_ENUM_Success.getCode());
-        commonResponse.setMessage(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
-        commonResponse.setResult(goodsRes.save(goods));
+        commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        commonResponse.setData(goodsRes.save(goods));
         return commonResponse;
 
     }
     @PostMapping("/editGoods")
     public CommonResponse editGoods(@RequestBody @Validated Goods goods){
         CommonResponse commonResponse=new CommonResponse();
-        commonResponse.setCode(ResponseEnum.RESPONSE_ENUM_Success.getCode());
-        commonResponse.setMessage(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
-        commonResponse.setResult(goodsRes.save(goods));
+        commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        commonResponse.setData(goodsRes.save(goods));
         return commonResponse;
     }
 
     @PostMapping("/upLoadPicture")
     public CommonResponse upLoadPicture(@RequestParam("fileContent")String fileContent) throws FileNotFoundException {
         CommonResponse commonResponse=new CommonResponse();
-        commonResponse.setCode(ResponseEnum.RESPONSE_ENUM_Success.getCode());
-        commonResponse.setMessage(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
-        commonResponse.setResult(fileUtil.GenerateImage(fileContent));
+        commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        commonResponse.setData(fileUtil.GenerateImage(fileContent));
         return commonResponse;
     }
 

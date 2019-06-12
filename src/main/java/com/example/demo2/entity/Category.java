@@ -1,4 +1,5 @@
 package com.example.demo2.entity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Where;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "category")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Category {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,17 +3,37 @@ package com.example.demo2.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "comments")
-public class Comments {
+public class Comments implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long idcomments;
+  private Long idcomments;
   private String comment;
   private String commentUrl;
-  @OneToMany(cascade={ CascadeType.ALL })
+  private Integer commentUserId;
+  private Integer commentHasPic;
+
+  public Integer getCommentHasPic() {
+    return commentHasPic;
+  }
+
+  public void setCommentHasPic(Integer commentHasPic) {
+    this.commentHasPic = commentHasPic;
+  }
+
+  public Integer getCommentUserId() {
+        return commentUserId;
+    }
+
+    public void setCommentUserId(Integer commentUserId) {
+        this.commentUserId = commentUserId;
+    }
+
+    @OneToMany(cascade={ CascadeType.ALL })
   @JoinColumn(name = "imageUid",referencedColumnName = "commentUrl")
   private List<Images> commentPics;
 
@@ -33,14 +53,14 @@ public class Comments {
   private long commentGid;
   public  Comments(){}
 
-  public long getIdcomments() {
+
+  public Long getIdcomments() {
     return idcomments;
   }
 
-  public void setIdcomments(long idcomments) {
+  public void setIdcomments(Long idcomments) {
     this.idcomments = idcomments;
   }
-
 
   public String getComment() {
     return comment;

@@ -1,8 +1,12 @@
 package com.example.demo2.tools.WxEntity;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@XmlRootElement(name = "xml")
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "xml")
 public class NoticeResponse {
     private String return_code;
     private String 	return_msg;

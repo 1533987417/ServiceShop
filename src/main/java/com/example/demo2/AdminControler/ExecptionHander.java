@@ -35,8 +35,8 @@ public class ExecptionHander {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
    public CommonResponse handleConstraintViolationException(ConstraintViolationException e) {
         CommonResponse response=new CommonResponse();
-        response.setCode(ResponseEnum.RESPONSE_ENUM_Parm_Error.getCode());
-        response.setMessage(e.getMessage()); ;
+        response.setErrno(ResponseEnum.RESPONSE_ENUM_Parm_Error.getCode());
+        response.setErrmsg(e.getMessage()); ;
         ;
         return response;
     }
@@ -53,8 +53,8 @@ public class ExecptionHander {
     public CommonResponse handleBindException1(MethodArgumentNotValidException e) throws JsonProcessingException {
         e.getBindingResult().getAllErrors().forEach(System.out::println);
         CommonResponse response=new CommonResponse();
-        response.setCode(ResponseEnum.RESPONSE_ENUM_Parm_Error.getCode());
-       response.setMessage(e.getBindingResult().getFieldError().getField()+":"+e.getBindingResult().getFieldError().getDefaultMessage()); ;
+        response.setErrno(ResponseEnum.RESPONSE_ENUM_Parm_Error.getCode());
+       response.setErrmsg(e.getBindingResult().getFieldError().getField()+":"+e.getBindingResult().getFieldError().getDefaultMessage()); ;
        ;
         return response;
     }
@@ -68,8 +68,8 @@ public class ExecptionHander {
     @ExceptionHandler(Exception.class)
     public CommonResponse handleException1(Exception e)  {
         CommonResponse response=new CommonResponse();
-        response.setCode(ResponseEnum.RESPONSE_ENUM_Exception.getCode());
-        response.setMessage(e.getMessage()); ;
+        response.setErrno(ResponseEnum.RESPONSE_ENUM_Exception.getCode());
+        response.setErrmsg(e.getMessage()); ;
         ;
         return response;
     }

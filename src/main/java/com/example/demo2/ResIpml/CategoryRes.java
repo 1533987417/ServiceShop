@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface CategoryRes extends JpaRepository<Category,Long> {
-    List<Category>  getAllByCategoryPidAndCategoryStatus(Long id,Long Status);
+    List<Category>  getAllByCategoryPidAndCategoryStatusOrderByCategorySort(Long id,Long Status);
 }
