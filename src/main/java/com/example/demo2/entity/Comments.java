@@ -1,6 +1,9 @@
 package com.example.demo2.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import javafx.beans.DefaultProperty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "comments")
+@EntityListeners(AuditingEntityListener.class)
 public class Comments implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +51,7 @@ public class Comments implements Serializable {
 
   private String commentUserName;
   private String commentUserIcon;
+  @CreatedDate
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private java.sql.Timestamp commentDate;
   private long commentStatus;

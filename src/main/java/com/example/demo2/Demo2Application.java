@@ -9,11 +9,13 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.servlet.annotation.WebServlet;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class Demo2Application {
 	@Bean
 	public FilterRegistrationBean jwtFilter() {

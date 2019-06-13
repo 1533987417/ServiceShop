@@ -2,6 +2,7 @@ package com.example.demo2.Wxcontroller;
 
 import com.example.demo2.Request.GetGoodsRequest;
 import com.example.demo2.ResIpml.*;
+import com.example.demo2.Response.AttributeResponse;
 import com.example.demo2.Response.CommonResponse;
 import com.example.demo2.Response.PageResponse;
 import com.example.demo2.Response.ResponseEnum;
@@ -21,8 +22,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/wxApi")
@@ -45,6 +48,9 @@ public class testController {
     CommentRes commentRes;
     @Autowired
     WeiXinUtil weiXinUtil;
+
+    @Autowired
+    GoodAttributeRes goodAttributeRes;
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public CreateOrderResponse test(){
 
@@ -109,6 +115,31 @@ public class testController {
         }
         return  response;
     }
+    @RequestMapping(value = "/getAttribute",method = RequestMethod.GET)
+    public CommonResponse getAttribute(@RequestParam("goodId") Long goodId){
+        CommonResponse<List<AttributeResponse>> response=new CommonResponse<List<AttributeResponse>>();
+        if(goodId==null){
+            response.setErrno(ResponseEnum.RESPONSE_ENUM_Parm_Error.getCode());
+            response.setErrmsg(ResponseEnum.RESPONSE_ENUM_Parm_Error.getDesc());
+        }else {
+            List<AttributeResponse> responseList=new ArrayList<>();
+            List<GoodAttribute> all= goodAttributeRes.getGoodAttributesByAttributeGoodIdAndAndAttributeStatus(goodId, Long.valueOf(0));
+            List<GoodAttribute> parent=all.stream().filter(x->x.getAttributePid()==0).collect(Collectors.toList());
+            for (GoodAttribute e:parent
+                 ) {
+                AttributeResponse response1=new AttributeResponse();
+                response1.setGoodAttribute(e);
+               response1.setGoodChildAttribute(all.stream().filter(x->String.valueOf(x.getAttributePid()).equals(String.valueOf(e.getIdgoodAttribute()))).collect(Collectors.toList())); ;
+                responseList.add(response1);
+            }
+            response.setData(responseList);
+            response.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+            response.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+
+        }
+        return  response;
+    }
+
     @RequestMapping(value = "/getGoodById",method = RequestMethod.GET)
     public CommonResponse getGoodById(@RequestParam("id") Integer id){
         CommonResponse<Goods> response=new CommonResponse<Goods>();
@@ -199,6 +230,7 @@ public class testController {
         CommonResponse commonResponse=new CommonResponse();
         String uuid= UUID.randomUUID().toString();
         comment.setCommentUrl(uuid);
+        comment.setCommentHasPic(0);
         if(comment.getCommentPics().size()>0){
             comment.setCommentHasPic(1);
         }
