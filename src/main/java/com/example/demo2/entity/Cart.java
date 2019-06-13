@@ -8,24 +8,16 @@ public class Cart {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long idcart;
+  @Column(updatable=false)
   private long cartUserId;
-  private String cartGoodName;
-  private String cartGoodIcon;
-
-  public String getCartGoodIcon() {
-    return cartGoodIcon;
-  }
-
-  public void setCartGoodIcon(String cartGoodIcon) {
-    this.cartGoodIcon = cartGoodIcon;
-  }
-
+  @Column(updatable=false)
+  private String cartGoodAttributeValue;
   private long cartGoodCount;
   private long cartGoodStatus;
+  @Column(updatable=false)
   private long cartGoodId;
-  private long cartGoodPrice;
-
   public Cart(){}
+
   public long getIdcart() {
     return idcart;
   }
@@ -33,7 +25,6 @@ public class Cart {
   public void setIdcart(long idcart) {
     this.idcart = idcart;
   }
-
 
   public long getCartUserId() {
     return cartUserId;
@@ -43,15 +34,13 @@ public class Cart {
     this.cartUserId = cartUserId;
   }
 
-
-  public String getCartGoodName() {
-    return cartGoodName;
+  public String getCartGoodAttributeValue() {
+    return cartGoodAttributeValue;
   }
 
-  public void setCartGoodName(String cartGoodName) {
-    this.cartGoodName = cartGoodName;
+  public void setCartGoodAttributeValue(String cartGoodAttributeValue) {
+    this.cartGoodAttributeValue = cartGoodAttributeValue;
   }
-
 
   public long getCartGoodCount() {
     return cartGoodCount;
@@ -61,7 +50,6 @@ public class Cart {
     this.cartGoodCount = cartGoodCount;
   }
 
-
   public long getCartGoodStatus() {
     return cartGoodStatus;
   }
@@ -70,7 +58,6 @@ public class Cart {
     this.cartGoodStatus = cartGoodStatus;
   }
 
-
   public long getCartGoodId() {
     return cartGoodId;
   }
@@ -78,14 +65,4 @@ public class Cart {
   public void setCartGoodId(long cartGoodId) {
     this.cartGoodId = cartGoodId;
   }
-
-
-  public long getCartGoodPrice() {
-    return cartGoodPrice;
-  }
-
-  public void setCartGoodPrice(long cartGoodPrice) {
-    this.cartGoodPrice = cartGoodPrice;
-  }
-
 }

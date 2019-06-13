@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface GoodAttributeRes extends JpaRepository<GoodAttribute,Long> {
     List<GoodAttribute> getGoodAttributesByAttributeGoodIdAndAndAttributeStatus(Long goodId,Long status);
+    GoodAttribute getByIdgoodAttributeAndAndAttributeStatus(Long id,Long status);
 }

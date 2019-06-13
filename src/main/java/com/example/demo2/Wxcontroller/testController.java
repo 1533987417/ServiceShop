@@ -2,26 +2,29 @@ package com.example.demo2.Wxcontroller;
 
 import com.example.demo2.Request.GetGoodsRequest;
 import com.example.demo2.ResIpml.*;
-import com.example.demo2.Response.AttributeResponse;
-import com.example.demo2.Response.CommonResponse;
-import com.example.demo2.Response.PageResponse;
-import com.example.demo2.Response.ResponseEnum;
+import com.example.demo2.Response.*;
 import com.example.demo2.entity.*;
 
 import com.example.demo2.tools.HttpClient;
+import com.example.demo2.tools.JsonParse;
 import com.example.demo2.tools.WeiXinUtil;
 import com.example.demo2.tools.WxEntity.*;
 import com.example.demo2.tools.XMLUtil;
 
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -251,11 +254,64 @@ public class testController {
         commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
         return  commonResponse;
     }
+    @RequestMapping(value = "/deleteCart",method = RequestMethod.GET)
+    public CommonResponse deleteCart(@RequestParam("cartIds")String cartIds ){
 
+        String[] list=cartIds.split(",");
+        for (String i:list
+             ) {
+            if(!StringUtils.isEmpty(i)){
+                cartRes.updateStatusCart(Long.valueOf(1), Long.valueOf(i));
+            }
+
+        }
+        CommonResponse commonResponse=new CommonResponse();
+        commonResponse.setData(true);
+        commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        return  commonResponse;
+    }
     @RequestMapping(value = "/getMyCart",method = RequestMethod.GET)
     public CommonResponse getMyCart(@RequestParam("cartUserId")Long cartUserId){
         CommonResponse commonResponse=new CommonResponse();
-        commonResponse.setData(cartRes);
+
+        List<Cart> list=cartRes.getAllByCartUserIdAndCartGoodStatus(cartUserId, Long.valueOf(0));
+        List<CartResponse> responseList=new ArrayList<>();
+        for (Cart c:list
+             ) {
+            CartResponse entity=new CartResponse();
+            entity.setIsValid(0);
+            long price=0;
+            StringBuffer checkedText=new StringBuffer();
+            List<AttributeValue> attributeValueList= JsonParse.getInstance().fromJson(c.getCartGoodAttributeValue(),new TypeToken<List<AttributeValue>>() {
+        }.getType());
+            for (AttributeValue a:attributeValueList
+                 ) {
+                GoodAttribute goodAttribute= goodAttributeRes.getByIdgoodAttributeAndAndAttributeStatus(Long.valueOf(a.getValueId()),Long.valueOf(0));
+                if (goodAttribute==null){
+                    entity.setIsValid(1);//重新选择
+                }else {
+                    price=price+goodAttribute.getAttributePrice();
+                    checkedText.append(goodAttribute.getAttributeName());
+                    checkedText.append(" ");
+                }
+            }
+            Goods goods=goodsRes.getOne(c.getCartGoodId());
+            entity.setGoodName(goods.getGoodsName());
+            entity.setGoodIcon(goods.getGoodsIcon());
+            entity.setCheckedAttribute(checkedText.toString());
+            entity.setPrice(price);
+
+            if(goods.getGoodsStatus()!=0){
+                entity.setIsValid(1);//无效
+            }
+            entity.setCartGoodCount(c.getCartGoodCount());
+            entity.setIdcart(c.getIdcart());
+            entity.setCartGoodId(c.getCartGoodId());
+            responseList.add(entity);
+
+        }
+        commonResponse.setData(responseList);
         commonResponse.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
         commonResponse.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
         return  commonResponse;
