@@ -8,7 +8,6 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -17,7 +16,7 @@ spring:
          dialect: org.hibernate.dialect.MySQLDialect
     database-platform: org.hibernate.dialect.MySQLDialect
   resources:
-    static-locations: classpath:static/,file:static/
+    static-locations: classpath:static,file:static
 server:
   port:  8081
   url: http://localhost:8081/ykt

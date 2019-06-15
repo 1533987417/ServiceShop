@@ -1,15 +1,14 @@
 package com.example.demo2.Wxcontroller;
 
 import com.example.demo2.Request.GetGoodsRequest;
+import com.example.demo2.Request.WeiXinRequest;
 import com.example.demo2.ResIpml.*;
 import com.example.demo2.Response.*;
 import com.example.demo2.entity.*;
 
-import com.example.demo2.tools.HttpClient;
-import com.example.demo2.tools.JsonParse;
-import com.example.demo2.tools.WeiXinUtil;
+import com.example.demo2.tools.*;
+
 import com.example.demo2.tools.WxEntity.*;
-import com.example.demo2.tools.XMLUtil;
 
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -18,16 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,17 +52,23 @@ public class testController {
     CartRes cartRes;
     @Autowired
     CommentRes commentRes;
-    @Autowired
-    WeiXinUtil weiXinUtil;
+
 
     @Autowired
     GoodAttributeRes goodAttributeRes;
-    @RequestMapping(value = "/hello",method = RequestMethod.GET)
-    public CreateOrderResponse test(){
 
-        CreateOrderRequest request=new CreateOrderRequest();
-        request.setAppid("44444");
-       return weiXinUtil.createOrder(request,"");
+    @Autowired
+    UserRes userRes;
+    @Autowired
+    LoggerClient loggerClient;
+    @RequestMapping(value = "/hello")
+    public String test(@RequestParam("path") String url){
+
+       /* CreateOrderRequest request=new CreateOrderRequest();*/
+
+
+
+       return url;
     }
     @RequestMapping(value = "/getCategory",method = RequestMethod.GET)
     public CommonResponse getCategory(@RequestParam("categoryPid") Integer categoryPid){
@@ -335,12 +344,58 @@ public class testController {
 
     }
 
+
+    @PostMapping(value = "/loginByWeiXin")
+    public CommonResponse loginByWeiXin(@RequestBody WeiXinRequest request){
+        CommonResponse<UserInfoResponse> response=new CommonResponse<>();
+
+        HttpClient httpClient=new HttpClient();
+        String resultStr= httpClient.getOpenId("https://api.weixin.qq.com/sns/jscode2session?appid=wxb79f1c37818b2ba6&secret=19b2b88ff3f9a869eaa97033260e35b8&grant_type=authorization_code&js_code="+request.getCode());
+        Result result=JsonParse.getInstance().fromJson(resultStr,Result.class);
+        System.out.println(JsonParse.getInstance().toJson(result));
+        loggerClient.info(JsonParse.getInstance().toJson(result),"",response.getLogId());
+
+       User user= userRes.getUserByOpenId(result.getOpenid());
+       enUserInfo userInfo=request.getUserInfo().getUserInfo();
+
+
+        //根据openId查找用户是否注册登记
+       if(user==null||user.getIdUser()==0){
+           user =new User();
+           user.setUsername("微信用户"+UUID.randomUUID().toString());
+           user.setOpenId(result.getOpenid());
+           user.setLevelId(0);
+           user.setAvatar(userInfo.getAvatarUrl());
+           user.setGender(userInfo.getGender());
+           user.setNickname(userInfo.getNickName());
+           userRes.save(user);//更新用户信息
+       }else {
+           user.setAvatar(userInfo.getAvatarUrl());
+           user.setGender(userInfo.getGender());
+           user.setNickname(userInfo.getNickName());
+           userRes.save(user);//更新用户信息
+       }
+
+
+        UserInfoResponse u=new UserInfoResponse();
+        u.setToken(JwtUtil.generateToken(result.getOpenid()));
+        u.setUserInfo(user);
+       response.setErrmsg(ResponseEnum.RESPONSE_ENUM_Success.getDesc());
+        response.setErrno(ResponseEnum.RESPONSE_ENUM_Success.getCode());
+        response.setData(u);
+
+
+        return response;
+
+
+    }
+
+
     public static void main(String[] args) {
         Logger logger = Logger.getLogger(testController.class);
-        logger.getClass();
-        logger.info(logger.getLoggerRepository());
-        logger.error("错误");
-        logger.debug("调试");
+        HttpClient httpClient=new HttpClient();;
+        String result= httpClient.getOpenId("https://api.weixin.qq.com/sns/jscode2session?appid=wxb79f1c37818b2ba6&secret=19b2b88ff3f9a869eaa97033260e35b8&js_code=043oWr7Y0ClGhW1HmWaY0d3o7Y0oWr7r&grant_type=authorization_code");
+        System.out.println(JsonParse.getInstance().toJson(result));
     }
 
 }

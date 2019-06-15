@@ -18,20 +18,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
 public class HttpClient {
-    public Result client(String url, HttpMethod method, MultiValueMap<String, String> params){
+    public String getOpenId(String url){
         RestTemplate client = new RestTemplate();
-        client.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
-
-        HttpHeaders headers = new HttpHeaders();
-        //  请勿轻易改变此提交方式，大部分的情况下，提交方式都是表单提交
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, headers);
-        //  执行HTTP请求
-        ResponseEntity<Result> response = client.exchange(url, HttpMethod.POST, requestEntity, Result.class);
+        ResponseEntity<String> response= client.getForEntity(url,String.class);
         return response.getBody();
     }
     /**  

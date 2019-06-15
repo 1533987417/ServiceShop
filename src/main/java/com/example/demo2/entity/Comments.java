@@ -30,14 +30,14 @@ public class Comments implements Serializable {
   }
 
   public Integer getCommentUserId() {
-        return commentUserId;
-    }
+    return commentUserId;
+  }
 
-    public void setCommentUserId(Integer commentUserId) {
-        this.commentUserId = commentUserId;
-    }
+  public void setCommentUserId(Integer commentUserId) {
+    this.commentUserId = commentUserId;
+  }
 
-    @OneToMany(cascade={ CascadeType.ALL })
+  @OneToMany(cascade={ CascadeType.ALL })
   @JoinColumn(name = "imageUid",referencedColumnName = "commentUrl")
   private List<Images> commentPics;
 
